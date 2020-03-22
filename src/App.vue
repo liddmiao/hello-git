@@ -16,6 +16,7 @@
 import KInput from '@/components/KInput'
 import KFormItem from '@/components/KFormItem.vue'
 import KForm from '@/components/KForm.vue'
+import Notice from '@/components/Notice.vue'
 export default {
   name: 'App',
   data () {
@@ -47,7 +48,11 @@ export default {
         if (res) {
           alert('success')
         } else {
-          alert('failed')
+          this.$create(Notice, {
+            title: '校验失败',
+            message: '请检查必填项！',
+            duration: 3000
+          }).show()
         }
       })
     }

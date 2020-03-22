@@ -43,7 +43,12 @@ export default {
   },
   mounted () {
     this.$on('validate', () => {
-      this.validate()
+      const pro = this.validate()
+      pro.then(() => {
+        console.log('resolve')
+      }, () => {
+        console.log('reject')
+      })
     })
   }
 }
