@@ -8,7 +8,10 @@
 
 <script>
 import Schema from 'async-validator'
+import emitter from '@/mixins/emitter.js'
 export default {
+  name: 'KFormItem',
+  componentName: 'KFormItem',
   data () {
     return {
       error: ''
@@ -22,6 +25,7 @@ export default {
     name: String
   },
   inject: ['form'],
+  mixins: [emitter],
   methods: {
     validate () {
       const rule = this.form.rules[this.name]
@@ -50,6 +54,7 @@ export default {
         console.log('reject')
       })
     })
+    this.dispatch('KForm', 'kfrom.addChildNodes', [this])
   }
 }
 </script>
