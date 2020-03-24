@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import HelloWorld from '@/components/HelloWorld.vue'
+import About from '@/components/About.vue'
 import KRouter from './krouter.js'
 
 Vue.use(KRouter)
@@ -13,7 +14,7 @@ const router = [
   {
     path: '/about',
     name: 'about',
-    component: () => import('@/components/About.vue')
+    component: About
   }
 ]
 

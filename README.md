@@ -135,6 +135,8 @@ Vue.prototype.$create = create
 
 Vue.component()可以使用 Vue.extend()返回的构造函数来注册一个组件，并给这个组件命名
 
-# 2020.03.20
+# 2020.03.24
 
 ## 手写一个简单的 vue-router
+
+## 手写一个简单的 vuex

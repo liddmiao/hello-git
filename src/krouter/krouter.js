@@ -18,18 +18,18 @@ class KRouter {
       this.routeMap[route.path] = route.component
     })
   }
-  onHashChange() {
+  onHashChange () {
     this.current = window.location.hash.slice(1)
   }
 }
 
-KRouter.install = function(_vue) {
+KRouter.install = function (_vue) {
   Vue = _vue
   // 这里需要将router挂载到vue原型链上去
   // 这里使用beforeCreate钩子来获取选项，并挂载到vue原型链上
   // 使用一个全局的混入，router只有根实例上面有
   Vue.mixin({
-    beforeCreate() {
+    beforeCreate () {
       if (this.$options.router) {
         Vue.prototype.$router = this.$options.router
       }
