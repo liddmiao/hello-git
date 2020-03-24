@@ -1,13 +1,24 @@
 <template>
   <div id="app">
-    <k-form :model="model" :rules="rules" ref="form">
-      <k-form-item label="用户名" name="username">
-        <k-input v-model="model.username" placeholder="请输入用户名"></k-input>
+    <router-link to="/">home | </router-link>
+    <router-link to="/about">about</router-link>
+    <router-view></router-view>
+    <k-form :model="model"
+            :rules="rules"
+            ref="form">
+      <k-form-item label="用户名"
+                   name="username">
+        <k-input v-model="model.username"
+                 placeholder="请输入用户名"></k-input>
       </k-form-item>
-      <k-form-item label="密码" name="password">
-        <k-input v-model="model.password" placeholder="请输入密码" type="password"></k-input>
+      <k-form-item label="密码"
+                   name="password">
+        <k-input v-model="model.password"
+                 placeholder="请输入密码"
+                 type="password"></k-input>
       </k-form-item>
-      <button type="submit" @click="validateForm">校验</button>
+      <button type="submit"
+              @click="validateForm">校验</button>
     </k-form>
   </div>
 </template>

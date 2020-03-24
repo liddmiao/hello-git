@@ -1,10 +1,12 @@
 import Vue from 'vue'
 import App from './App.vue'
-import { create } from '@/utils/create.js';
+import { create } from '@/utils/create.js'
+import router from './krouter/index.js'
 
 Vue.prototype.$create = create
 Vue.config.productionTip = false
 
 new Vue({
-  render: h => h(App),
+  router,
+  render: h => h(App)
 }).$mount('#app')
