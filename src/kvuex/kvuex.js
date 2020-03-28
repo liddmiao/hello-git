@@ -4,16 +4,21 @@ let Vue
 class Store {
   constructor(options) {
     // 创建响应式数据
-    Vue.util.defineReactive(this, '$state', options.state)
+    // Vue.util.defineReactive(this, '$state', options.state)
+    this._vm = new Vue({
+      data: {
+        $$state: options.state
+      }
+    })
     this._mutations = options.mutations
     this._actions = options.actions
 
     const store = this
     const { commit, dispatch } = store
-    this.commit = function boundCommit (type, payload) {
+    this.commit = function (type, payload) {
       commit.call(store, type, payload)
     }
-    this.dispatch = function boundDispatch (type, payload) {
+    this.dispatch = function (type, payload) {
       dispatch.call(store, type, payload)
     }
   }
@@ -25,7 +30,7 @@ class Store {
     entry(this.state, payload)
   }
   get state () {
-    return this.$state
+    return this._vm.$data.$$state
   }
   dispatch (type, payload) {
     const entry = this._actions[type]

@@ -1,8 +1,13 @@
 <template>
   <div id="app">
-    <router-link to="/">home |</router-link>
+    <!-- <router-link to="/">home |</router-link>
     <router-link to="/about">about</router-link>
-    <router-view></router-view>
+    <router-view></router-view>-->
+
+    <k-router-link to="/">router home |</k-router-link>
+    <k-router-link to="/about">router about</k-router-link>
+    <k-router-view></k-router-view>
+
     <k-form :model="model" :rules="rules" ref="form">
       <k-form-item label="用户名" name="username">
         <k-input v-model="model.username" placeholder="请输入用户名"></k-input>
@@ -45,9 +50,6 @@ export default {
     KInput,
     KFormItem,
     KForm
-  },
-  mounted () {
-    console.log(this.$store)
   },
   methods: {
     validateForm () {
