@@ -1,4 +1,3 @@
-
 let Vue
 
 class Store {
@@ -22,15 +21,20 @@ class Store {
       dispatch.call(store, type, payload)
     }
   }
+  get state () {
+    return this._vm._data.$$state
+    // return this.$state
+  }
+  // 阻止用户直接改变state的值
+  set state (val) {
+    console.error('you can not change state by direct assignment "' + val + '"')
+  }
   commit (type, payload) {
     const entry = this._mutations[type]
     if (!entry) {
       console.error('unknown mutation type:' + type)
     }
     entry(this.state, payload)
-  }
-  get state () {
-    return this._vm.$data.$$state
   }
   dispatch (type, payload) {
     const entry = this._actions[type]

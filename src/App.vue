@@ -18,6 +18,8 @@
       <button type="submit" @click="validateForm">校验</button>
     </k-form>
     <div @click="$store.commit('SET_COUNT',2)">{{$store.state.count}}</div>
+    <div @click="$store.dispatch('ASYNC_COUNT',10)">async: {{$store.state.count}}</div>
+    <div @click="$store.state = 'dididid'">直接改变state</div>
   </div>
 </template>
 
