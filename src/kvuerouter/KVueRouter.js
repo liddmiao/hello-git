@@ -1,5 +1,5 @@
 import KRouterLink from './KRouterLink.js'
-import KRouterView from './KRouterView.js';
+import KRouterView from './KRouterView.js'
 
 // 声明一个变量来接收install方法中收到的Vue构造函数
 let Vue

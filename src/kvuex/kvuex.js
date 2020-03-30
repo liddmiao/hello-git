@@ -4,6 +4,7 @@ class Store {
   constructor(options) {
     // 创建响应式数据
     // Vue.util.defineReactive(this, '$state', options.state)
+    // 这里需要使用computed来实现getters，所以使用new Vue()来创建响应式变量，两个$可以不让$$state被_vm代理
     this._vm = new Vue({
       data: {
         $$state: options.state
