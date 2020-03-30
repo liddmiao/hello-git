@@ -8,18 +8,27 @@
     <k-router-link to="/about">router about</k-router-link>
     <k-router-view></k-router-view>
 
-    <k-form :model="model" :rules="rules" ref="form">
-      <k-form-item label="用户名" name="username">
-        <k-input v-model="model.username" placeholder="请输入用户名"></k-input>
+    <k-form :model="model"
+            :rules="rules"
+            ref="form">
+      <k-form-item label="用户名"
+                   name="username">
+        <k-input v-model="model.username"
+                 placeholder="请输入用户名"></k-input>
       </k-form-item>
-      <k-form-item label="密码" name="password">
-        <k-input v-model="model.password" placeholder="请输入密码" type="password"></k-input>
+      <k-form-item label="密码"
+                   name="password">
+        <k-input v-model="model.password"
+                 placeholder="请输入密码"
+                 type="password"></k-input>
       </k-form-item>
-      <button type="submit" @click="validateForm">校验</button>
+      <button type="submit"
+              @click="validateForm">校验</button>
     </k-form>
     <div @click="$store.commit('SET_COUNT',2)">{{$store.state.count}}</div>
     <div @click="$store.dispatch('ASYNC_COUNT',10)">async: {{$store.state.count}}</div>
     <div @click="$store.state = 'dididid'">直接改变state</div>
+    <div>{{$store.getters['GET_COUNT']}}</div>
   </div>
 </template>
 
