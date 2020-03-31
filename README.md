@@ -140,3 +140,150 @@ Vue.component()可以使用 Vue.extend()返回的构造函数来注册一个组�
 ## 手写一个简单的 vue-router
 
 ## 手写一个简单的 vuex
+
+#### 需求
+
+Vuex 是一个帮助我们集中管理 vue 组件状态的状态管理插件，我们将模拟它的 state、mutation、action、getter。在组件内，我们可以通过 vm.$store.commit()来更改state，或者使用vm.$store.dispatch()来异步地改变 state，同时阻止用户通过 vm.$store.state=''这种方式直接改变state；用户可以使用$store.getters()来获取 state，当 state 改变时，获取的值也做相应的改变。
+
+#### 实现
+
+首先，我们创建一个简单的 Store
+
+- index.js
+
+```JavaScript
+import Vue from 'vue'
+import Vuex from './kstorevuex.js'
+
+Vue.use(Vuex)
+
+export default new Vuex.Store({
+  state: {
+    count: 1
+  },
+  mutations: {
+    SET_COUNT(state, value) {
+      state.count = value
+    }
+  },
+  actions: {
+    ASYNC_COUNT(state, value) {
+      setTimeout(() => {
+        state.count = value
+      }, 2000)
+    }
+  },
+  getters: {
+    GET_COUNT(state) {
+      return state.count
+    }
+  }
+})
+
+```
+
+和 vue-router 一样，我们要实现一个 Store 类和 install 方法，但是注意我们使用的时候是 new Vuex.Store，所以，KVuex 文件应该是这样的
+
+- KVuex.js
+
+```JavaScript
+let Vue
+
+class Store {
+  constructor(options) {}
+}
+function install(_vue) {}
+export default { Store, install }
+```
+
+同样的，我们要在 install 方法中将\$store 挂到 Vue 原型链上，方便组件来调用。
+
+- function install
+
+```JavaScript
+function install(_vue) {
+  // 这里和仿vue-router组件是一样的
+  Vue = _vue
+  Vue.mixin({
+    beforeCreate() {
+      if (this.$options.store) {
+        Vue.prototype.$store = this.$options.store
+      }
+    }
+  })
+}
+```
+
+在 class Store 中，我们要实现 getter、commit、dispatch 这三个方法；和仿 vue-router 不同的是，我们创建响应式数据的方式有所变化，值得注意的一点是利用 computed 选项实现 getter。
+
+- class Store
+
+```JavaScript
+class Store {
+  constructor(options) {
+    // 将action和mutation存入this
+    this._mutations = options.mutations
+    this._actions = options.actions
+    this._wrapGetters = options.getters
+    this.getters = {}
+    // 利用computed选项实现getter，避免this指向混乱，使用一个变量保存this
+    const store = this
+    let computed = {}
+    // 遍历vuex的getter配置项
+    Object.keys(store._wrapGetters).forEach(key => {
+      const f = store._wrapGetters[key]
+      // 由于computed里面的函数没有参数，所以这里稍微处理一下
+      computed[key] = () => {
+        return f(store.state)
+      }
+      // 设置store.getter只读
+      Object.defineProperty(store.getters, key, {
+        get: () => {
+          return store._vm[key]
+        }
+      })
+    })
+    // 创建一个响应式的$$state属性，不使用defineReactive()方法是因为实现getter方法需要使用computed选项，state前面加两个$可以不让vue自动代理$$state
+    this._vm = new Vue({
+      data: {
+        $$state: options.state
+      },
+      computed
+    })
+
+    // 将commit和dispatch从this中解构出来
+    const { commit, dispatch } = store
+    this.commit = function(type, payload) {
+      commit.call(store, type, payload)
+    }
+    this.dispatch = function(type, payload) {
+      dispatch.call(store, type, payload)
+    }
+  }
+
+  // 使用getter，返回state
+  get state() {
+    return this._vm._data.$$state
+  }
+  // 阻止用户直接修改state
+  set state(val) {
+    console.error('you can not change state by direct assignment "' + val + '"')
+  }
+
+  // 创建一个commit方法和dispatch方法
+  commit(type, payload) {
+    const entry = this._mutations[type]
+    if (!entry) {
+      console.error('unknown mutation type:' + type)
+    }
+    entry(this.state, payload)
+  }
+  dispatch(type, payload) {
+    const entry = this._actions[type]
+    if (!entry) {
+      console.error('unknown action type:' + type)
+    }
+    entry(this.state, payload)
+  }
+}
+```
